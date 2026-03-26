@@ -106,22 +106,19 @@ def iterate_pagerank(corpus, damping_factor):
     """
     N=len(corpus)
     dic_cop= {key:1/N for key in corpus}
-    dic_cop2=copy.deepcopy(dic_cop)
 
     while True:
-        changes=False
-        for page in dic_cop.keys():
-            if len(corpus[page])==0:
-                corpus[page]=corpus.keys()
-            for page2 in dic_cop.keys():
-                if page in corpus[page2] and page!=page2:
-                    dic_cop2[page]+=damping_factor*dic_cop[page2]/len(corpus[page2])
-        summation=sum(dic_cop2.values())
-        dic_cop2={page:PD/summation for page, PD in dic_cop2.items()}
-        change_val=abs(np.array(list(dic_cop.values()))-np.array(list(dic_cop2.values())))<0.001
-
-        dic_cop=copy.deepcopy(dic_cop2)
-        if np.all(change_val):
+        new_rank={}
+        for page in corpus:
+            rank=(1-damping_factor)/N
+            for page2 in corpus:
+                links=corpus[page2] if corpus[page2] else corpus.keys()
+                if page in links:
+                    rank+=damping_factor*dic_cop[page2]/len(links)
+            new_rank[page]=rank
+        change_val=[abs(new_rank[page]-dic_cop[page]) for page in dic_cop]
+        dic_cop=new_rank
+        if max(change_val)<0.001:
             break
 
     result=dic_cop
