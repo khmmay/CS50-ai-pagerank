@@ -218,7 +218,7 @@ This project is part of Harvard's \*\*CS50: Introduction to Artificial Intellige
 
 
 
-Your Name  
+Karl Henrik May
 
-https://github.com/YOUR\_USERNAME
+https://github.com/khmmay
 
